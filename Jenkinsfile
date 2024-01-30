@@ -10,7 +10,9 @@ pipeline {
 
     stage('Application Build') {
       steps {
-        sh 'scripts/build.sh'
+        nodejs(nodeJSInstallationName: 'Node 780') {
+         sh 'scripts/build.sh'
+        }
       }
     }
 
