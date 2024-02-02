@@ -31,7 +31,9 @@ pipeline {
         stage('Docker Build') { 
             agent  any
             steps {
-                docker.build("node${env.BRANCH_NAME}:1.0")
+                script{
+                    docker.build("node${env.BRANCH_NAME}:1.0")
+                }
             }
         }
     }
