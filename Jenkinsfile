@@ -46,7 +46,7 @@ pipeline {
                     if(BRANCH_NAME == 'dev'){
                         EXPOSE_PORT=3001
                     }
-                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 node{env.BRANCH_NAME}:v1.0"
+                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 node${env.BRANCH_NAME}:v1.0"
                 }
             }
         }
