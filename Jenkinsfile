@@ -42,13 +42,13 @@ pipeline {
             agent  any
             steps {
                 script{
-                    sh "docker rm -f node${env.BRANCH_NAME}:1.0"
+                    sh "docker rm -f node${env.BRANCH_NAME}1.0"
                     sh "docker image pull registry:5000/node${env.BRANCH_NAME}:1.0"
                     EXPOSE_PORT=3001
                     if(BRANCH_NAME == 'dev'){
                         EXPOSE_PORT=3002
                     }
-                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 --name node${env.BRANCH_NAME}:1.0 registry:5000/node${env.BRANCH_NAME}:1.0"
+                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 --name node${env.BRANCH_NAME}1.0 registry:5000/node${env.BRANCH_NAME}:1.0"
                 }
             }
         }
