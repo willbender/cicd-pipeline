@@ -32,7 +32,8 @@ pipeline {
             agent  any
             steps {
                 script{
-                    docker.build("node${env.BRANCH_NAME}:1.0")
+                    def image = docker.build("registry:5001/node${env.BRANCH_NAME}:1.0")
+                    image.push()
                 }
             }
         }
@@ -42,11 +43,11 @@ pipeline {
             steps {
                 script{
                     sh "docker rm -f node${env.BRANCH_NAME}:1.0"
-                    EXPOSE_PORT=3000
+                    EXPOSE_PORT=3001
                     if(BRANCH_NAME == 'dev'){
-                        EXPOSE_PORT=3001
+                        EXPOSE_PORT=3002
                     }
-                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 node${env.BRANCH_NAME}:v1.0"
+                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 registry:5001/node${env.BRANCH_NAME}:v1.0"
                 }
             }
         }
