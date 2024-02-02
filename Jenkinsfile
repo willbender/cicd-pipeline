@@ -1,44 +1,15 @@
 pipeline {
-  agent any
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-        sh "chmod +x -R ${env.WORKSPACE}"
-      }
-    }
-
-    stage('Application Build') {
-      steps {
-        nodejs(nodeJSInstallationName: 'Node 780') {
-         sh 'scripts/build.sh'
+    agent {
+        docker {
+            image 'node:7.8.0' 
+            args '-p 3000:3000' 
         }
-      }
     }
-
-    stage('Application Test') {
-      steps {
-        sh 'scripts/test.sh'
-      }
-    }
-
-    stage('Docker image build') {
-      steps {
-        sh 'docker build -t a13xg0/gorbach_cicd:$BUILD_NUMBER .'
-      }
-    }
-
-    stage('Docker image deploy') {
-      steps {
-        script {
-          docker.withRegistry('', 'dockerhub-cicd')
-          {
-            docker.image("a13xg0/gorbach_cicd:$env.BUILD_NUMBER").push("latest")
-          }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'npm install' 
+            }
         }
-
-      }
     }
-
-  }
 }
