@@ -1,4 +1,10 @@
 pipeline {
+
+    environment{
+        registry = "willbender"
+        registryCredential = 'dockerhub'
+    }
+    
     agent none
     stages {
         //Build stage to build the app
@@ -32,8 +38,10 @@ pipeline {
             agent  any
             steps {
                 script{
-                    def image = docker.build("registry:5000/node${env.BRANCH_NAME}:1.0")
-                    image.push()
+                    def image = docker.build registry + "/node${env.BRANCH_NAME}:1.0"
+                    docker.withRegistry('', registryCredential){
+                        image.push()
+                    }
                 }
             }
         }
@@ -43,12 +51,12 @@ pipeline {
             steps {
                 script{
                     sh "docker rm -f node${env.BRANCH_NAME}1.0"
-                    sh "docker image pull registry:5000/node${env.BRANCH_NAME}:1.0"
+                    sh "docker image pull willbender/node${env.BRANCH_NAME}:1.0"
                     EXPOSE_PORT=3001
                     if(BRANCH_NAME == 'dev'){
                         EXPOSE_PORT=3002
                     }
-                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 --name node${env.BRANCH_NAME}1.0 registry:5000/node${env.BRANCH_NAME}:1.0"
+                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 --name node${env.BRANCH_NAME}1.0 willbender/node${env.BRANCH_NAME}:1.0"
                 }
             }
         }
