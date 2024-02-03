@@ -49,15 +49,7 @@ pipeline {
         stage('Deploy') { 
             agent  any
             steps {
-                script{
-                    sh "docker rm -f node${env.BRANCH_NAME}1.0"
-                    sh "docker image pull willbender/node${env.BRANCH_NAME}:1.0"
-                    EXPOSE_PORT=3001
-                    if(BRANCH_NAME == 'dev'){
-                        EXPOSE_PORT=3002
-                    }
-                    sh "docker run -d --expose ${EXPOSE_PORT} -p ${EXPOSE_PORT}:3000 --name node${env.BRANCH_NAME}1.0 willbender/node${env.BRANCH_NAME}:1.0"
-                }
+                build job: 'CD_deploy', wait: true, parameters: [string(name: 'IMAGE_TAG', value: '1.0'), choice(name: 'TARGET_ENVIRONMENT', value: env.BRANCH_NAME)]
             }
         }
     }
