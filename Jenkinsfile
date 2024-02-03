@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy') { 
             agent  any
             steps {
-                build job: 'CD_deploy', wait: true, parameters: [string(name: 'IMAGE_TAG', value: '1.0'), choice(name: 'TARGET_ENVIRONMENT', value: env.BRANCH_NAME)]
+                build job: 'CD_deploy', wait: true, parameters: [string(name: 'IMAGE_TAG', value: '1.0'), string(name: 'TARGET_ENVIRONMENT', value: env.BRANCH_NAME)]
             }
         }
     }
