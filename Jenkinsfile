@@ -38,7 +38,7 @@ pipeline {
             agent  any
             steps {
                 script{
-                    def image = docker.build registry + "node${env.BRANCH_NAME}:1.0"
+                    def image = docker.build registry + "/node${env.BRANCH_NAME}:1.0"
                     docker.withRegistry('', registryCredential){
                         image.push()
                     }
